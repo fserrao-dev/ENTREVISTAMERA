@@ -1,0 +1,21 @@
+# Dependencies
+node_modules/
+.pnpm-store/
+
+# Next.js
+.next/
+out/
+build/
+
+# Environment variables — NUNCA commitear
+.env.local
+.env.*.local
+.env
+
+# Prisma
+prisma/migrations/
+
+# Misc
+.DS_Store
+*.log
+.vercel
