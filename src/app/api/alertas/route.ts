@@ -35,8 +35,11 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: 'Faltan campos requeridos.' }, { status: 400 })
   }
 
+  const autorId = user.id
+  const autorNombre = user.user_metadata?.nombre || user.email || ''
+
   const alerta = await prisma.alerta.create({
-    data: { candidatoId, etapa, tipo, descripcion: descripcion.trim(), esDeEstado: false },
+    data: { candidatoId, etapa, tipo, descripcion: descripcion.trim(), esDeEstado: false, autorId, autorNombre },
   })
 
   // Recalcular riesgo

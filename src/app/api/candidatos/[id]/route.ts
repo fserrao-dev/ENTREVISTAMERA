@@ -32,6 +32,8 @@ export async function PATCH(request: NextRequest, { params }: { params: { id: st
   if (!user) return NextResponse.json({ error: 'No autorizado' }, { status: 401 })
 
   const role = (user.user_metadata?.role as UserRole) ?? 'operaciones'
+  const autorId = user.id
+  const autorNombre = user.user_metadata?.nombre || user.email || ''
   const body = await request.json()
   const { action } = body
 
@@ -60,24 +62,24 @@ export async function PATCH(request: NextRequest, { params }: { params: { id: st
   if (action === 'eval_ops') {
     await prisma.evalOperaciones.upsert({
       where: { candidatoId: params.id },
-      create: { candidatoId: params.id, score: body.score, tecnica: body.tecnica, recomendado: body.recomendado, comentarios: body.comentarios },
-      update: { score: body.score, tecnica: body.tecnica, recomendado: body.recomendado, comentarios: body.comentarios },
+      create: { candidatoId: params.id, score: body.score, tecnica: body.tecnica, recomendado: body.recomendado, comentarios: body.comentarios, autorId, autorNombre },
+      update: { score: body.score, tecnica: body.tecnica, recomendado: body.recomendado, comentarios: body.comentarios, autorId, autorNombre },
     })
   }
 
   if (action === 'eval_rrhh') {
     await prisma.evalRRHH.upsert({
       where: { candidatoId: params.id },
-      create: { candidatoId: params.id, blandas: body.blandas, comunicacion: body.comunicacion, adaptabilidad: body.adaptabilidad, aptoC: body.aptoC, comentarios: body.comentarios },
-      update: { blandas: body.blandas, comunicacion: body.comunicacion, adaptabilidad: body.adaptabilidad, aptoC: body.aptoC, comentarios: body.comentarios },
+      create: { candidatoId: params.id, blandas: body.blandas, comunicacion: body.comunicacion, adaptabilidad: body.adaptabilidad, aptoC: body.aptoC, comentarios: body.comentarios, autorId, autorNombre },
+      update: { blandas: body.blandas, comunicacion: body.comunicacion, adaptabilidad: body.adaptabilidad, aptoC: body.aptoC, comentarios: body.comentarios, autorId, autorNombre },
     })
   }
 
   if (action === 'eval_cap') {
     await prisma.evalCapacitacion.upsert({
       where: { candidatoId: params.id },
-      create: { candidatoId: params.id, herramientas: body.herramientas, curva: body.curva, cumplimiento: body.cumplimiento, listo: body.listo, tieneAlerta: body.tieneAlerta, tipoAlerta: body.tipoAlerta ?? null, comentarios: body.comentarios },
-      update: { herramientas: body.herramientas, curva: body.curva, cumplimiento: body.cumplimiento, listo: body.listo, tieneAlerta: body.tieneAlerta, tipoAlerta: body.tipoAlerta ?? null, comentarios: body.comentarios },
+      create: { candidatoId: params.id, herramientas: body.herramientas, curva: body.curva, cumplimiento: body.cumplimiento, listo: body.listo, tieneAlerta: body.tieneAlerta, tipoAlerta: body.tipoAlerta ?? null, comentarios: body.comentarios, autorId, autorNombre },
+      update: { herramientas: body.herramientas, curva: body.curva, cumplimiento: body.cumplimiento, listo: body.listo, tieneAlerta: body.tieneAlerta, tipoAlerta: body.tipoAlerta ?? null, comentarios: body.comentarios, autorId, autorNombre },
     })
   }
 
