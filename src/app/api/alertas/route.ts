@@ -20,7 +20,7 @@ export async function GET() {
 
 export async function POST(request: NextRequest) {
   const body = await request.json()
-  const { candidatoId, etapa, tipo, descripcion } = body
+  const { candidatoId, etapa, tipo, descripcion, autorNombre } = body
 
   if (!candidatoId || !etapa || !tipo || !descripcion?.trim()) {
     return NextResponse.json({ error: 'Faltan campos requeridos.' }, { status: 400 })
@@ -28,6 +28,16 @@ export async function POST(request: NextRequest) {
 
   const alerta = await prisma.alerta.create({
     data: { candidatoId, etapa, tipo, descripcion: descripcion.trim(), esDeEstado: false },
+  })
+
+  // Registrar en historial
+  await prisma.historial.create({
+    data: {
+      candidatoId,
+      evento: `Alerta: ${tipo}`,
+      detalle: `[${etapa}] ${descripcion.trim()}${autorNombre ? ' · por ' + autorNombre : ''}`,
+      color: tipo === 'CONDUCTUAL' ? 'red' : 'yellow',
+    },
   })
 
   const todasAlertas = await prisma.alerta.findMany({ where: { candidatoId } })
