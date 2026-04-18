@@ -53,12 +53,6 @@ export async function GET(request: NextRequest) {
 }
 
 export async function POST(request: NextRequest) {
-  const supabase = createRouteClient(request)
-  const { data: { session } } = await supabase.auth.getSession()
-  const user = session?.user
-  if (!user) return NextResponse.json({ error: 'No autorizado' }, { status: 401 })
-
-  // Todos los roles pueden crear colaboradores
   const body = await request.json()
   const { nombre, dni, legajo, campana, fechaIngreso, fechaFinCapa } = body
 
