@@ -3,7 +3,7 @@
 
 import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
-import { createClient, createAdminClient } from '@/lib/supabase/server'
+import { createRouteClient, createAdminClient } from '@/lib/supabase/server'
 import type { UserRole } from '@/types'
 
 function requireAdmin(role: string) {
@@ -11,8 +11,8 @@ function requireAdmin(role: string) {
   return null
 }
 
-export async function GET() {
-  const supabase = createClient()
+export async function GET(request: NextRequest) {
+  const supabase = createRouteClient(request)
   const { data: { session } } = await supabase.auth.getSession()
   const user = session?.user
   if (!user) return NextResponse.json({ error: 'No autorizado' }, { status: 401 })
@@ -37,7 +37,7 @@ export async function GET() {
 }
 
 export async function POST(request: NextRequest) {
-  const supabase = createClient()
+  const supabase = createRouteClient(request)
   const { data: { session } } = await supabase.auth.getSession()
   const user = session?.user
   if (!user) return NextResponse.json({ error: 'No autorizado' }, { status: 401 })
@@ -70,7 +70,7 @@ export async function POST(request: NextRequest) {
 }
 
 export async function PATCH(request: NextRequest) {
-  const supabase = createClient()
+  const supabase = createRouteClient(request)
   const { data: { session } } = await supabase.auth.getSession()
   const user = session?.user
   if (!user) return NextResponse.json({ error: 'No autorizado' }, { status: 401 })
@@ -92,7 +92,7 @@ export async function PATCH(request: NextRequest) {
 }
 
 export async function DELETE(request: NextRequest) {
-  const supabase = createClient()
+  const supabase = createRouteClient(request)
   const { data: { session } } = await supabase.auth.getSession()
   const user = session?.user
   if (!user) return NextResponse.json({ error: 'No autorizado' }, { status: 401 })

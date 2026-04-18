@@ -2,12 +2,13 @@
 // GET: métricas generales del dashboard
 
 import { NextResponse } from 'next/server'
+import type { NextRequest } from 'next/server'
 import { prisma } from '@/lib/prisma'
-import { createClient } from '@/lib/supabase/server'
+import { createRouteClient } from '@/lib/supabase/server'
 import type { DashboardStats } from '@/types'
 
-export async function GET() {
-  const supabase = createClient()
+export async function GET(request: NextRequest) {
+  const supabase = createRouteClient(request)
   const { data: { session } } = await supabase.auth.getSession()
   const user = session?.user
   if (!user) return NextResponse.json({ error: 'No autorizado' }, { status: 401 })

@@ -4,12 +4,12 @@
 import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
 import { prisma } from '@/lib/prisma'
-import { createClient } from '@/lib/supabase/server'
+import { createRouteClient } from '@/lib/supabase/server'
 import { calcularRiesgo } from '@/lib/utils'
 import type { UserRole } from '@/types'
 
-export async function GET(_req: NextRequest, { params }: { params: { id: string } }) {
-  const supabase = createClient()
+export async function GET(request: NextRequest, { params }: { params: { id: string } }) {
+  const supabase = createRouteClient(request)
   const { data: { session } } = await supabase.auth.getSession()
   const user = session?.user
   if (!user) return NextResponse.json({ error: 'No autorizado' }, { status: 401 })
@@ -28,7 +28,7 @@ export async function GET(_req: NextRequest, { params }: { params: { id: string 
 }
 
 export async function PATCH(request: NextRequest, { params }: { params: { id: string } }) {
-  const supabase = createClient()
+  const supabase = createRouteClient(request)
   const { data: { session } } = await supabase.auth.getSession()
   const user = session?.user
   if (!user) return NextResponse.json({ error: 'No autorizado' }, { status: 401 })
