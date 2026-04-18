@@ -29,9 +29,9 @@ export async function GET(request: NextRequest) {
     { dni: { contains: search } },
   ]
   if (desde || hasta) {
-    where.fechaPostulacion = {}
-    if (desde) where.fechaPostulacion.gte = new Date(desde)
-    if (hasta) where.fechaPostulacion.lte = new Date(hasta + 'T23:59:59')
+    where.fechaIngreso = {}
+    if (desde) where.fechaIngreso.gte = new Date(desde)
+    if (hasta) where.fechaIngreso.lte = new Date(hasta + 'T23:59:59')
   }
   if (alerta === 'con') where.alertas = { some: { esDeEstado: false } }
   if (alerta === 'sin') where.alertas = { none: { esDeEstado: false } }
@@ -58,7 +58,7 @@ export async function POST(request: NextRequest) {
 
   // Todos los roles pueden crear colaboradores
   const body = await request.json()
-  const { nombre, dni, puesto, campana, fechaPostulacion } = body
+  const { nombre, dni, legajo, campana, fechaIngreso, fechaFinCapa } = body
 
   if (!nombre?.trim() || !dni?.trim() || !campana) {
     return NextResponse.json({ error: 'Nombre, DNI y campaña son obligatorios.' }, { status: 400 })
@@ -69,9 +69,10 @@ export async function POST(request: NextRequest) {
       data: {
         nombre: nombre.trim(),
         dni: dni.trim(),
-        puesto: puesto?.trim() || null,
+        legajo: legajo?.trim() || null,
         campana,
-        fechaPostulacion: fechaPostulacion ? new Date(fechaPostulacion) : new Date(),
+        fechaIngreso: fechaIngreso ? new Date(fechaIngreso) : new Date(),
+        fechaFinCapa: fechaFinCapa ? new Date(fechaFinCapa) : null,
       },
       include: {
         evalOps: true, evalRRHH: true, evalCap: true,

@@ -62,10 +62,11 @@ model Candidato {
   id               String          @id @default(cuid())
   nombre           String
   dni              String          @unique
-  puesto           String?
+  legajo           String?
   campana          Campana
   estado           EstadoCandidato @default(EN_PROCESO)
-  fechaPostulacion DateTime        @default(now())
+  fechaIngreso     DateTime        @default(now())
+  fechaFinCapa     DateTime?
   riesgo           NivelRiesgo     @default(BAJO)
   createdAt        DateTime        @default(now())
   updatedAt        DateTime        @updatedAt
@@ -79,7 +80,7 @@ model Candidato {
   @@index([campana])
   @@index([estado])
   @@index([riesgo])
-  @@index([fechaPostulacion])
+  @@index([fechaIngreso])
 }
 
 // ─── EVALUACIONES ────────────────────────────────────────

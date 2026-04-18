@@ -24,9 +24,9 @@ export async function GET(request: NextRequest) {
   if (campana) where.campana = campana
   if (estado) where.estado = estado
   if (desde || hasta) {
-    where.fechaPostulacion = {}
-    if (desde) where.fechaPostulacion.gte = new Date(desde)
-    if (hasta) where.fechaPostulacion.lte = new Date(hasta + 'T23:59:59')
+    where.fechaIngreso = {}
+    if (desde) where.fechaIngreso.gte = new Date(desde)
+    if (hasta) where.fechaIngreso.lte = new Date(hasta + 'T23:59:59')
   }
 
   const candidatos = await prisma.candidato.findMany({
@@ -38,7 +38,8 @@ export async function GET(request: NextRequest) {
   // Convertir fechas a string para el tipo Candidato
   const serialized = candidatos.map(c => ({
     ...c,
-    fechaPostulacion: c.fechaPostulacion.toISOString(),
+    fechaIngreso: c.fechaIngreso.toISOString(),
+    fechaFinCapa: c.fechaFinCapa?.toISOString() ?? null,
     createdAt: c.createdAt.toISOString(),
     updatedAt: c.updatedAt.toISOString(),
     alertas: c.alertas.map(a => ({ ...a, createdAt: a.createdAt.toISOString() })),

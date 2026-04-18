@@ -70,10 +70,11 @@ export interface Candidato {
   id: string
   nombre: string
   dni: string
-  puesto?: string | null
+  legajo?: string | null
   campana: Campana
   estado: EstadoCandidato
-  fechaPostulacion: string
+  fechaIngreso: string
+  fechaFinCapa?: string | null
   riesgo: NivelRiesgo
   createdAt: string
   updatedAt: string

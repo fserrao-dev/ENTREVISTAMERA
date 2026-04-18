@@ -134,9 +134,10 @@ function NuevoColaboradorModal({ onClose, onSaved }: { onClose: () => void; onSa
     const body = {
       nombre: fd.get('nombre'),
       dni: fd.get('dni'),
-      puesto: fd.get('puesto') || null,
+      legajo: fd.get('legajo') || null,
       campana: fd.get('campana'),
-      fechaPostulacion: fd.get('fechaPostulacion') || undefined,
+      fechaIngreso: fd.get('fechaIngreso') || undefined,
+      fechaFinCapa: fd.get('fechaFinCapa') || undefined,
     }
     const res = await fetch('/api/candidatos', {
       method: 'POST',
@@ -171,7 +172,7 @@ function NuevoColaboradorModal({ onClose, onSaved }: { onClose: () => void; onSa
         <form onSubmit={handleSubmit}>
           <div style={{ padding: '18px 20px', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
             <div style={{ gridColumn: '1/-1' }}>
-              <label style={labelStyle}>Nombre completo *</label>
+              <label style={labelStyle}>Nombre y apellido *</label>
               <input name="nombre" required style={inputStyle} placeholder="Juan Pérez" />
             </div>
             <div>
@@ -179,10 +180,10 @@ function NuevoColaboradorModal({ onClose, onSaved }: { onClose: () => void; onSa
               <input name="dni" required style={inputStyle} placeholder="12345678" />
             </div>
             <div>
-              <label style={labelStyle}>Puesto</label>
-              <input name="puesto" style={inputStyle} placeholder="Ej: Agente de ventas" />
+              <label style={labelStyle}>Legajo</label>
+              <input name="legajo" style={inputStyle} placeholder="Ej: 001234" />
             </div>
-            <div>
+            <div style={{ gridColumn: '1/-1' }}>
               <label style={labelStyle}>Campaña *</label>
               <select name="campana" required style={{ ...inputStyle, cursor: 'pointer' }}>
                 {Object.entries(CAMPANA_LABELS).map(([k, v]) => (
@@ -191,8 +192,12 @@ function NuevoColaboradorModal({ onClose, onSaved }: { onClose: () => void; onSa
               </select>
             </div>
             <div>
-              <label style={labelStyle}>Fecha postulación</label>
-              <input name="fechaPostulacion" type="date" style={inputStyle} defaultValue={new Date().toISOString().split('T')[0]} />
+              <label style={labelStyle}>Fecha de ingreso</label>
+              <input name="fechaIngreso" type="date" style={inputStyle} defaultValue={new Date().toISOString().split('T')[0]} />
+            </div>
+            <div>
+              <label style={labelStyle}>Fecha fin de capa</label>
+              <input name="fechaFinCapa" type="date" style={inputStyle} />
             </div>
           </div>
 

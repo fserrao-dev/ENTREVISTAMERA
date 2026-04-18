@@ -16,6 +16,9 @@ export async function register() {
       `ALTER TABLE "EvalCapacitacion" ADD COLUMN IF NOT EXISTS "autorNombre" TEXT NOT NULL DEFAULT ''`,
       `ALTER TABLE "Alerta" ADD COLUMN IF NOT EXISTS "autorId" TEXT NOT NULL DEFAULT ''`,
       `ALTER TABLE "Alerta" ADD COLUMN IF NOT EXISTS "autorNombre" TEXT NOT NULL DEFAULT ''`,
+      `ALTER TABLE "Candidato" ADD COLUMN IF NOT EXISTS "legajo" TEXT`,
+      `ALTER TABLE "Candidato" ADD COLUMN IF NOT EXISTS "fechaIngreso" TIMESTAMP(3) NOT NULL DEFAULT NOW()`,
+      `ALTER TABLE "Candidato" ADD COLUMN IF NOT EXISTS "fechaFinCapa" TIMESTAMP(3)`,
     ]
 
     for (const sql of cols) {

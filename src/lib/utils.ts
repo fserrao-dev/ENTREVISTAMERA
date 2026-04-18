@@ -22,7 +22,7 @@ export function tieneDiscrepancia(c: Candidato): boolean {
 
 export function generarCSV(candidatos: Candidato[]): string {
   const headers = [
-    'Nombre', 'DNI', 'Puesto', 'Campaña', 'Estado', 'Fecha Postulación', 'Riesgo',
+    'Nombre', 'DNI', 'Legajo', 'Campaña', 'Estado', 'Fecha Ingreso', 'Fecha Fin Capa', 'Riesgo',
     'Ops Score', 'Ops Técnica', 'Ops Recomendado',
     'RRHH Blandas', 'RRHH Comunicación', 'RRHH Adaptabilidad', 'RRHH Apto Cultural',
     'Cap Herramientas', 'Cap Curva', 'Cap Cumplimiento', 'Cap Listo',
@@ -32,10 +32,11 @@ export function generarCSV(candidatos: Candidato[]): string {
   const rows = candidatos.map(c => [
     c.nombre,
     c.dni,
-    c.puesto ?? '',
+    c.legajo ?? '',
     c.campana.replace('_', ' '),
     c.estado.replace('_', ' '),
-    c.fechaPostulacion.split('T')[0],
+    c.fechaIngreso.split('T')[0],
+    c.fechaFinCapa ? c.fechaFinCapa.split('T')[0] : '',
     c.riesgo,
     c.evalOps?.score ?? '',
     c.evalOps?.tecnica ?? '',

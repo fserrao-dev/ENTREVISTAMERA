@@ -148,7 +148,7 @@ export default function CandidatoModal({ candidato: initial, role, onClose, onSa
                   <h3 style={{ fontSize: 16, fontWeight: 600, marginBottom: 4 }}>{c.nombre}</h3>
                   <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap', marginBottom: 8 }}>
                     <span className="badge-gray">DNI: {c.dni}</span>
-                    {c.puesto && <span className="badge-gray">{c.puesto}</span>}
+                    {c.legajo && <span className="badge-gray">Leg. {c.legajo}</span>}
                     <span className="badge-blue">{CAMPANA_LABELS[c.campana]}</span>
                     <EstadoBadge estado={c.estado} />
                     {c.riesgo !== 'BAJO' && <RiesgoBadge riesgo={c.riesgo} />}
@@ -156,7 +156,7 @@ export default function CandidatoModal({ candidato: initial, role, onClose, onSa
                   <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
                     <span style={{ fontSize: 11, color: 'var(--text3)' }}>Etapas:</span>
                     <ProgressDots candidato={c} />
-                    <span style={{ fontSize: 11, color: 'var(--text3)', marginLeft: 4 }}>📅 {c.fechaPostulacion.split('T')[0]}</span>
+                    <span style={{ fontSize: 11, color: 'var(--text3)', marginLeft: 4 }}>📅 {c.fechaIngreso.split('T')[0]}</span>
                   </div>
                 </div>
               </div>
