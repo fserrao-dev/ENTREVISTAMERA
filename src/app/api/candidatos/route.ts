@@ -8,12 +8,12 @@ import type { Campana, EstadoCandidato } from '@/types'
 
 export async function GET(request: NextRequest) {
   const { searchParams } = new URL(request.url)
-  const search  = searchParams.get('search') ?? ''
+  const search = searchParams.get('search') ?? ''
   const campana = searchParams.get('campana') as Campana | null
-  const estado  = searchParams.get('estado') as EstadoCandidato | null
-  const alerta  = searchParams.get('alerta') as 'con' | 'sin' | null
-  const desde   = searchParams.get('desde')
-  const hasta   = searchParams.get('hasta')
+  const estado = searchParams.get('estado') as EstadoCandidato | null
+  const alerta = searchParams.get('alerta') as 'con' | 'sin' | null
+  const desde = searchParams.get('desde')
+  const hasta = searchParams.get('hasta')
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const where: any = {}
@@ -71,10 +71,12 @@ export async function POST(request: NextRequest) {
     })
     return NextResponse.json({ data: candidato }, { status: 201 })
   } catch (err: unknown) {
+    console.error('[POST /api/candidatos] Error al crear colaborador:', err)
     const isUniqueError = (err as { code?: string })?.code === 'P2002'
     if (isUniqueError) {
       return NextResponse.json({ error: 'Ya existe un colaborador con ese DNI.' }, { status: 409 })
     }
-    return NextResponse.json({ error: 'Error al crear el colaborador.' }, { status: 500 })
+    const message = (err as { message?: string })?.message ?? 'Error desconocido'
+    return NextResponse.json({ error: 'Error al crear el colaborador.', detail: message }, { status: 500 })
   }
 }
