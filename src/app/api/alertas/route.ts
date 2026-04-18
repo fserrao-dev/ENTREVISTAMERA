@@ -9,7 +9,8 @@ import { calcularRiesgo } from '@/lib/utils'
 
 export async function GET(_req: NextRequest) {
   const supabase = createClient()
-  const { data: { user } } = await supabase.auth.getUser()
+  const { data: { session } } = await supabase.auth.getSession()
+  const user = session?.user
   if (!user) return NextResponse.json({ error: 'No autorizado' }, { status: 401 })
 
   const alertas = await prisma.alerta.findMany({
@@ -25,7 +26,8 @@ export async function GET(_req: NextRequest) {
 
 export async function POST(request: NextRequest) {
   const supabase = createClient()
-  const { data: { user } } = await supabase.auth.getUser()
+  const { data: { session } } = await supabase.auth.getSession()
+  const user = session?.user
   if (!user) return NextResponse.json({ error: 'No autorizado' }, { status: 401 })
 
   const body = await request.json()

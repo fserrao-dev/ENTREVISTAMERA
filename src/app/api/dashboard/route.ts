@@ -8,7 +8,8 @@ import type { DashboardStats } from '@/types'
 
 export async function GET() {
   const supabase = createClient()
-  const { data: { user } } = await supabase.auth.getUser()
+  const { data: { session } } = await supabase.auth.getSession()
+  const user = session?.user
   if (!user) return NextResponse.json({ error: 'No autorizado' }, { status: 401 })
 
   const [candidatos, alertas] = await Promise.all([

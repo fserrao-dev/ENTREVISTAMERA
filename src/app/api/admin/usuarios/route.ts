@@ -13,7 +13,8 @@ function requireAdmin(role: string) {
 
 export async function GET() {
   const supabase = createClient()
-  const { data: { user } } = await supabase.auth.getUser()
+  const { data: { session } } = await supabase.auth.getSession()
+  const user = session?.user
   if (!user) return NextResponse.json({ error: 'No autorizado' }, { status: 401 })
 
   const denied = requireAdmin(user.user_metadata?.role)
@@ -37,7 +38,8 @@ export async function GET() {
 
 export async function POST(request: NextRequest) {
   const supabase = createClient()
-  const { data: { user } } = await supabase.auth.getUser()
+  const { data: { session } } = await supabase.auth.getSession()
+  const user = session?.user
   if (!user) return NextResponse.json({ error: 'No autorizado' }, { status: 401 })
 
   const denied = requireAdmin(user.user_metadata?.role)
@@ -69,7 +71,8 @@ export async function POST(request: NextRequest) {
 
 export async function PATCH(request: NextRequest) {
   const supabase = createClient()
-  const { data: { user } } = await supabase.auth.getUser()
+  const { data: { session } } = await supabase.auth.getSession()
+  const user = session?.user
   if (!user) return NextResponse.json({ error: 'No autorizado' }, { status: 401 })
 
   const denied = requireAdmin(user.user_metadata?.role)
@@ -90,7 +93,8 @@ export async function PATCH(request: NextRequest) {
 
 export async function DELETE(request: NextRequest) {
   const supabase = createClient()
-  const { data: { user } } = await supabase.auth.getUser()
+  const { data: { session } } = await supabase.auth.getSession()
+  const user = session?.user
   if (!user) return NextResponse.json({ error: 'No autorizado' }, { status: 401 })
 
   const denied = requireAdmin(user.user_metadata?.role)

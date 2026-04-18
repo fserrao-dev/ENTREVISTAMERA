@@ -10,7 +10,8 @@ import type { UserRole } from '@/types'
 
 export async function GET(_req: NextRequest, { params }: { params: { id: string } }) {
   const supabase = createClient()
-  const { data: { user } } = await supabase.auth.getUser()
+  const { data: { session } } = await supabase.auth.getSession()
+  const user = session?.user
   if (!user) return NextResponse.json({ error: 'No autorizado' }, { status: 401 })
 
   const candidato = await prisma.candidato.findUnique({
@@ -28,7 +29,8 @@ export async function GET(_req: NextRequest, { params }: { params: { id: string 
 
 export async function PATCH(request: NextRequest, { params }: { params: { id: string } }) {
   const supabase = createClient()
-  const { data: { user } } = await supabase.auth.getUser()
+  const { data: { session } } = await supabase.auth.getSession()
+  const user = session?.user
   if (!user) return NextResponse.json({ error: 'No autorizado' }, { status: 401 })
 
   const role = (user.user_metadata?.role as UserRole) ?? 'operaciones'

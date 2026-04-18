@@ -9,7 +9,8 @@ import type { Campana, EstadoCandidato } from '@/types'
 
 export async function GET(request: NextRequest) {
   const supabase = createClient()
-  const { data: { user } } = await supabase.auth.getUser()
+  const { data: { session } } = await supabase.auth.getSession()
+  const user = session?.user
   if (!user) return NextResponse.json({ error: 'No autorizado' }, { status: 401 })
 
   const { searchParams } = new URL(request.url)
@@ -53,7 +54,8 @@ export async function GET(request: NextRequest) {
 
 export async function POST(request: NextRequest) {
   const supabase = createClient()
-  const { data: { user } } = await supabase.auth.getUser()
+  const { data: { session } } = await supabase.auth.getSession()
+  const user = session?.user
   if (!user) return NextResponse.json({ error: 'No autorizado' }, { status: 401 })
 
   // Todos los roles pueden crear colaboradores
