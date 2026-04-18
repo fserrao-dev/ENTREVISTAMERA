@@ -4,6 +4,7 @@
 import { NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
 import type { DashboardStats } from '@/types'
+export const dynamic = 'force-dynamic'
 
 export async function GET() {
   const [candidatos, alertas] = await Promise.all([
