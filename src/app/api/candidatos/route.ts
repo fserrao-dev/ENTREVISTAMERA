@@ -8,20 +8,20 @@ import type { Campana, EstadoCandidato } from '@/types'
 
 export async function GET(request: NextRequest) {
   const { searchParams } = new URL(request.url)
-  const search = searchParams.get('search') ?? ''
+  const search  = searchParams.get('search') ?? ''
   const campana = searchParams.get('campana') as Campana | null
-  const estado = searchParams.get('estado') as EstadoCandidato | null
-  const alerta = searchParams.get('alerta') as 'con' | 'sin' | null
-  const desde = searchParams.get('desde')
-  const hasta = searchParams.get('hasta')
+  const estado  = searchParams.get('estado') as EstadoCandidato | null
+  const alerta  = searchParams.get('alerta') as 'con' | 'sin' | null
+  const desde   = searchParams.get('desde')
+  const hasta   = searchParams.get('hasta')
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const where: any = {}
   if (campana) where.campana = campana
-  if (estado) where.estado = estado
+  if (estado)  where.estado  = estado
   if (search) where.OR = [
     { nombre: { contains: search, mode: 'insensitive' } },
-    { dni: { contains: search } },
+    { dni:    { contains: search } },
   ]
   if (desde || hasta) {
     where.fechaPostulacion = {}
@@ -35,10 +35,10 @@ export async function GET(request: NextRequest) {
     where,
     orderBy: { createdAt: 'desc' },
     include: {
-      evalOps:  true,
-      evalRRHH: true,
-      evalCap:  true,
-      alertas:  { orderBy: { createdAt: 'desc' } },
+      evalOps:   true,
+      evalRRHH:  true,
+      evalCap:   true,
+      alertas:   { orderBy: { createdAt: 'desc' } },
       historial: { orderBy: { createdAt: 'desc' } },
     },
   })
@@ -57,12 +57,19 @@ export async function POST(request: NextRequest) {
   try {
     const candidato = await prisma.candidato.create({
       data: {
-        nombre: nombre.trim(),
-        dni: dni.trim(),
-        legajo: legajo?.trim() || null,
+        nombre:           nombre.trim(),
+        dni:              dni.trim(),
+        legajo:           legajo?.trim() || null,
         campana,
         fechaPostulacion: fechaIngreso ? new Date(fechaIngreso) : new Date(),
-        fechaFinCapa: fechaFinCapa ? new Date(fechaFinCapa) : null,
+        fechaFinCapa:     fechaFinCapa ? new Date(fechaFinCapa) : null,
+        historial: {
+          create: {
+            evento: 'Colaborador creado',
+            detalle: `Ingresó a campaña ${campana}${fechaIngreso ? ' · Fecha: ' + fechaIngreso : ''}`,
+            color: 'blue',
+          },
+        },
       },
       include: {
         evalOps: true, evalRRHH: true, evalCap: true,
