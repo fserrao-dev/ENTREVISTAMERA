@@ -67,7 +67,7 @@ export async function POST(request: NextRequest) {
         dni: dni.trim(),
         legajo: legajo?.trim() || null,
         campana,
-        fechaIngreso: fechaIngreso ? new Date(fechaIngreso) : new Date(),
+        fechaPostulacion: fechaIngreso ? new Date(fechaIngreso) : new Date(),
         fechaFinCapa: fechaFinCapa ? new Date(fechaFinCapa) : null,
       },
       include: {

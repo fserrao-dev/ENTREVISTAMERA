@@ -73,7 +73,7 @@ export interface Candidato {
   legajo?: string | null
   campana: Campana
   estado: EstadoCandidato
-  fechaIngreso: string
+  fechaPostulacion: string
   fechaFinCapa?: string | null
   riesgo: NivelRiesgo
   createdAt: string

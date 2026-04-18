@@ -65,7 +65,7 @@ model Candidato {
   legajo           String?
   campana          Campana
   estado           EstadoCandidato @default(EN_PROCESO)
-  fechaIngreso     DateTime        @default(now())
+  fechaPostulacion DateTime        @default(now())
   fechaFinCapa     DateTime?
   riesgo           NivelRiesgo     @default(BAJO)
   createdAt        DateTime        @default(now())
@@ -80,7 +80,7 @@ model Candidato {
   @@index([campana])
   @@index([estado])
   @@index([riesgo])
-  @@index([fechaIngreso])
+  @@index([fechaPostulacion])
 }
 
 // ─── EVALUACIONES ────────────────────────────────────────

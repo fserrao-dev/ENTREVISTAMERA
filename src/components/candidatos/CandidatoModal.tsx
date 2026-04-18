@@ -156,7 +156,7 @@ export default function CandidatoModal({ candidato: initial, role, onClose, onSa
                   <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
                     <span style={{ fontSize: 11, color: 'var(--text3)' }}>Etapas:</span>
                     <ProgressDots candidato={c} />
-                    <span style={{ fontSize: 11, color: 'var(--text3)', marginLeft: 4 }}>📅 {c.fechaIngreso.split('T')[0]}</span>
+                    <span style={{ fontSize: 11, color: 'var(--text3)', marginLeft: 4 }}>📅 {c.fechaPostulacion.split('T')[0]}</span>
                   </div>
                 </div>
               </div>
