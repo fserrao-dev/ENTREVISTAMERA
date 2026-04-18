@@ -1,18 +1,12 @@
 // src/app/api/alertas/route.ts
-// GET: todas las alertas reales | POST: crear alerta (todos los roles)
+// GET: todas las alertas reales | POST: crear alerta
 
 import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
 import { prisma } from '@/lib/prisma'
-import { createRouteClient } from '@/lib/supabase/server'
 import { calcularRiesgo } from '@/lib/utils'
 
-export async function GET(request: NextRequest) {
-  const supabase = createRouteClient(request)
-  const { data: { session } } = await supabase.auth.getSession()
-  const user = session?.user
-  if (!user) return NextResponse.json({ error: 'No autorizado' }, { status: 401 })
-
+export async function GET() {
   const alertas = await prisma.alerta.findMany({
     where: { esDeEstado: false },
     orderBy: { createdAt: 'desc' },
@@ -25,11 +19,6 @@ export async function GET(request: NextRequest) {
 }
 
 export async function POST(request: NextRequest) {
-  const supabase = createRouteClient(request)
-  const { data: { session } } = await supabase.auth.getSession()
-  const user = session?.user
-  if (!user) return NextResponse.json({ error: 'No autorizado' }, { status: 401 })
-
   const body = await request.json()
   const { candidatoId, etapa, tipo, descripcion } = body
 
@@ -37,14 +26,10 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: 'Faltan campos requeridos.' }, { status: 400 })
   }
 
-  const autorId = user.id
-  const autorNombre = user.user_metadata?.nombre || user.email || ''
-
   const alerta = await prisma.alerta.create({
-    data: { candidatoId, etapa, tipo, descripcion: descripcion.trim(), esDeEstado: false, autorId, autorNombre },
+    data: { candidatoId, etapa, tipo, descripcion: descripcion.trim(), esDeEstado: false },
   })
 
-  // Recalcular riesgo
   const todasAlertas = await prisma.alerta.findMany({ where: { candidatoId } })
   const nuevoRiesgo = calcularRiesgo(todasAlertas)
   await prisma.candidato.update({ where: { id: candidatoId }, data: { riesgo: nuevoRiesgo } })

@@ -4,16 +4,10 @@
 import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
 import { prisma } from '@/lib/prisma'
-import { createRouteClient } from '@/lib/supabase/server'
 import { generarCSV } from '@/lib/utils'
 import type { Campana, EstadoCandidato } from '@/types'
 
 export async function GET(request: NextRequest) {
-  const supabase = createRouteClient(request)
-  const { data: { session } } = await supabase.auth.getSession()
-  const user = session?.user
-  if (!user) return NextResponse.json({ error: 'No autorizado' }, { status: 401 })
-
   const { searchParams } = new URL(request.url)
   const campana = searchParams.get('campana') as Campana | null
   const estado  = searchParams.get('estado') as EstadoCandidato | null
@@ -36,7 +30,6 @@ export async function GET(request: NextRequest) {
     include: { evalOps: true, evalRRHH: true, evalCap: true, alertas: true, historial: true },
   })
 
-  // Convertir fechas a string para el tipo Candidato
   const serialized = candidatos.map(c => ({
     ...c,
     fechaPostulacion: c.fechaPostulacion.toISOString(),

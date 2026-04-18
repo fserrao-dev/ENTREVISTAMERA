@@ -2,17 +2,10 @@
 // GET: métricas generales del dashboard
 
 import { NextResponse } from 'next/server'
-import type { NextRequest } from 'next/server'
 import { prisma } from '@/lib/prisma'
-import { createRouteClient } from '@/lib/supabase/server'
 import type { DashboardStats } from '@/types'
 
-export async function GET(request: NextRequest) {
-  const supabase = createRouteClient(request)
-  const { data: { session } } = await supabase.auth.getSession()
-  const user = session?.user
-  if (!user) return NextResponse.json({ error: 'No autorizado' }, { status: 401 })
-
+export async function GET() {
   const [candidatos, alertas] = await Promise.all([
     prisma.candidato.findMany({
       include: { evalOps: true, evalRRHH: true, evalCap: true, alertas: true },
@@ -34,7 +27,6 @@ export async function GET(request: NextRequest) {
 
   const pct = (n: number) => total ? Math.round((n / total) * 100) : 0
 
-  // Por campaña
   const campanasMap = new Map<string, { total: number; conAlerta: number }>()
   candidatos.forEach(c => {
     const existing = campanasMap.get(c.campana) ?? { total: 0, conAlerta: 0 }
@@ -46,7 +38,6 @@ export async function GET(request: NextRequest) {
     .map(([campana, d]) => ({ campana: campana as DashboardStats['porCampana'][0]['campana'], ...d }))
     .sort((a, b) => b.total - a.total)
 
-  // Por estado
   const estadosMap = new Map<string, number>()
   candidatos.forEach(c => estadosMap.set(c.estado, (estadosMap.get(c.estado) ?? 0) + 1))
   const porEstado = Array.from(estadosMap.entries())

@@ -4,16 +4,9 @@
 import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
 import { prisma } from '@/lib/prisma'
-import { createRouteClient } from '@/lib/supabase/server'
 import { calcularRiesgo } from '@/lib/utils'
-import type { UserRole } from '@/types'
 
-export async function GET(request: NextRequest, { params }: { params: { id: string } }) {
-  const supabase = createRouteClient(request)
-  const { data: { session } } = await supabase.auth.getSession()
-  const user = session?.user
-  if (!user) return NextResponse.json({ error: 'No autorizado' }, { status: 401 })
-
+export async function GET(_request: NextRequest, { params }: { params: { id: string } }) {
   const candidato = await prisma.candidato.findUnique({
     where: { id: params.id },
     include: {
@@ -28,18 +21,9 @@ export async function GET(request: NextRequest, { params }: { params: { id: stri
 }
 
 export async function PATCH(request: NextRequest, { params }: { params: { id: string } }) {
-  const supabase = createRouteClient(request)
-  const { data: { session } } = await supabase.auth.getSession()
-  const user = session?.user
-  if (!user) return NextResponse.json({ error: 'No autorizado' }, { status: 401 })
-
-  const role = (user.user_metadata?.role as UserRole) ?? 'operaciones'
-  const autorId = user.id
-  const autorNombre = user.user_metadata?.nombre || user.email || ''
   const body = await request.json()
   const { action } = body
 
-  // ── Cambio de estado: todos los roles ──
   if (action === 'estado') {
     const updated = await prisma.candidato.update({
       where: { id: params.id },
@@ -49,17 +33,8 @@ export async function PATCH(request: NextRequest, { params }: { params: { id: st
     return NextResponse.json({ data: updated })
   }
 
-  // ── Evaluaciones: según rol ──
-  const stagePermissions: Record<UserRole, string[]> = {
-    admin:       ['eval_ops', 'eval_rrhh', 'eval_cap'],
-    operaciones: ['eval_ops'],
-    rrhh:        ['eval_rrhh'],
-    capacitacion:['eval_cap'],
-  }
-
-  if (!stagePermissions[role].includes(action)) {
-    return NextResponse.json({ error: 'No tenés permiso para modificar esta etapa.' }, { status: 403 })
-  }
+  const autorId = body.autorId ?? ''
+  const autorNombre = body.autorNombre ?? ''
 
   if (action === 'eval_ops') {
     await prisma.evalOperaciones.upsert({
@@ -85,7 +60,6 @@ export async function PATCH(request: NextRequest, { params }: { params: { id: st
     })
   }
 
-  // Recalcular riesgo
   const alertas = await prisma.alerta.findMany({ where: { candidatoId: params.id } })
   const nuevoRiesgo = calcularRiesgo(alertas)
 

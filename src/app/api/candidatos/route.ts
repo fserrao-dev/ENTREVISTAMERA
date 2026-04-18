@@ -1,18 +1,12 @@
 // src/app/api/candidatos/route.ts
-// GET: lista candidatos con filtros | POST: crea candidato (todos los roles)
+// GET: lista candidatos con filtros | POST: crea candidato
 
 import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
 import { prisma } from '@/lib/prisma'
-import { createRouteClient } from '@/lib/supabase/server'
 import type { Campana, EstadoCandidato } from '@/types'
 
 export async function GET(request: NextRequest) {
-  const supabase = createRouteClient(request)
-  const { data: { session } } = await supabase.auth.getSession()
-  const user = session?.user
-  if (!user) return NextResponse.json({ error: 'No autorizado' }, { status: 401 })
-
   const { searchParams } = new URL(request.url)
   const search  = searchParams.get('search') ?? ''
   const campana = searchParams.get('campana') as Campana | null
@@ -30,9 +24,9 @@ export async function GET(request: NextRequest) {
     { dni: { contains: search } },
   ]
   if (desde || hasta) {
-    where.fechaIngreso = {}
-    if (desde) where.fechaIngreso.gte = new Date(desde)
-    if (hasta) where.fechaIngreso.lte = new Date(hasta + 'T23:59:59')
+    where.fechaPostulacion = {}
+    if (desde) where.fechaPostulacion.gte = new Date(desde)
+    if (hasta) where.fechaPostulacion.lte = new Date(hasta + 'T23:59:59')
   }
   if (alerta === 'con') where.alertas = { some: { esDeEstado: false } }
   if (alerta === 'sin') where.alertas = { none: { esDeEstado: false } }
