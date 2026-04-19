@@ -1,6 +1,8 @@
 // src/app/api/alertas/route.ts
 // GET: todas las alertas reales | POST: crear alerta
 
+export const dynamic = 'force-dynamic'
+
 import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
 import { prisma } from '@/lib/prisma'

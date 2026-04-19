@@ -1,6 +1,8 @@
 // src/app/api/candidatos/route.ts
 // GET: lista candidatos con filtros | POST: crea candidato
 
+export const dynamic = 'force-dynamic'
+
 import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
 import { prisma } from '@/lib/prisma'

@@ -1,6 +1,8 @@
 // src/app/api/candidatos/[id]/route.ts
 // GET: detalle | PATCH: actualizar (eval, estado)
 
+export const dynamic = 'force-dynamic'
+
 import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
 import { prisma } from '@/lib/prisma'

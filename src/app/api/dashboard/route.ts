@@ -1,6 +1,8 @@
 // src/app/api/dashboard/route.ts
 // GET: métricas generales del dashboard
 
+export const dynamic = 'force-dynamic'
+
 import { NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
 import type { DashboardStats } from '@/types'

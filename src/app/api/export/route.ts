@@ -1,6 +1,8 @@
 // src/app/api/export/route.ts
 // GET: descarga CSV con los candidatos filtrados
 
+export const dynamic = 'force-dynamic'
+
 import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
 import { prisma } from '@/lib/prisma'

@@ -1,6 +1,8 @@
 // src/app/api/admin/usuarios/route.ts
 // CRUD de usuarios vía Supabase Admin API
 
+export const dynamic = 'force-dynamic'
+
 import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
 import { createAdminClient } from '@/lib/supabase/server'
