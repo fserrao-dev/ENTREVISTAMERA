@@ -62,11 +62,9 @@ model Candidato {
   id               String          @id @default(cuid())
   nombre           String
   dni              String          @unique
-  legajo           String?
   campana          Campana
   estado           EstadoCandidato @default(EN_PROCESO)
   fechaPostulacion DateTime        @default(now())
-  fechaFinCapa     DateTime?
   riesgo           NivelRiesgo     @default(BAJO)
   createdAt        DateTime        @default(now())
   updatedAt        DateTime        @updatedAt
@@ -94,8 +92,6 @@ model EvalOperaciones {
   tecnica     Int
   recomendado Boolean
   comentarios String?
-  autorId     String   @default("")
-  autorNombre String   @default("")
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -111,8 +107,6 @@ model EvalRRHH {
   adaptabilidad Int
   aptoC         Boolean
   comentarios   String?
-  autorId       String  @default("")
-  autorNombre   String  @default("")
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -130,8 +124,6 @@ model EvalCapacitacion {
   tieneAlerta  Boolean    @default(false)
   tipoAlerta   TipoAlerta?
   comentarios  String?
-  autorId      String     @default("")
-  autorNombre  String     @default("")
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -148,8 +140,6 @@ model Alerta {
   tipo        TipoAlerta
   descripcion String
   esDeEstado  Boolean     @default(false)
-  autorId     String      @default("")
-  autorNombre String      @default("")
 
   createdAt DateTime @default(now())
 

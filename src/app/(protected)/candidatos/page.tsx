@@ -140,10 +140,8 @@ function NuevoColaboradorModal({ onClose, onSaved }: { onClose: () => void; onSa
     const body = {
       nombre: fd.get('nombre'),
       dni: fd.get('dni'),
-      legajo: fd.get('legajo') || null,
       campana: fd.get('campana'),
       fechaIngreso: fd.get('fechaIngreso') || undefined,
-      fechaFinCapa: fd.get('fechaFinCapa') || undefined,
     }
     const res = await fetch('/api/candidatos', {
       method: 'POST',
@@ -185,10 +183,6 @@ function NuevoColaboradorModal({ onClose, onSaved }: { onClose: () => void; onSa
               <label style={labelStyle}>DNI *</label>
               <input name="dni" required style={inputStyle} placeholder="12345678" />
             </div>
-            <div>
-              <label style={labelStyle}>Legajo</label>
-              <input name="legajo" style={inputStyle} placeholder="Ej: 001234" />
-            </div>
             <div style={{ gridColumn: '1/-1' }}>
               <label style={labelStyle}>Campaña *</label>
               <select name="campana" required style={{ ...inputStyle, cursor: 'pointer' }}>
@@ -197,13 +191,9 @@ function NuevoColaboradorModal({ onClose, onSaved }: { onClose: () => void; onSa
                 ))}
               </select>
             </div>
-            <div>
+            <div style={{ gridColumn: '1/-1' }}>
               <label style={labelStyle}>Fecha de ingreso</label>
               <input name="fechaIngreso" type="date" style={inputStyle} defaultValue={new Date().toISOString().split('T')[0]} />
-            </div>
-            <div>
-              <label style={labelStyle}>Fecha fin de capa</label>
-              <input name="fechaFinCapa" type="date" style={inputStyle} />
             </div>
           </div>
 

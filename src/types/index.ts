@@ -20,7 +20,6 @@ export interface EvalOps {
   tecnica: number
   recomendado: boolean
   comentarios?: string | null
-  autorNombre: string
   updatedAt: string
 }
 
@@ -31,7 +30,6 @@ export interface EvalRRHH {
   adaptabilidad: number
   aptoC: boolean
   comentarios?: string | null
-  autorNombre: string
   updatedAt: string
 }
 
@@ -44,7 +42,6 @@ export interface EvalCap {
   tieneAlerta: boolean
   tipoAlerta?: TipoAlerta | null
   comentarios?: string | null
-  autorNombre: string
   updatedAt: string
 }
 
@@ -54,7 +51,6 @@ export interface Alerta {
   tipo: TipoAlerta
   descripcion: string
   esDeEstado: boolean
-  autorNombre: string
   createdAt: string
 }
 
@@ -70,11 +66,9 @@ export interface Candidato {
   id: string
   nombre: string
   dni: string
-  legajo?: string | null
   campana: Campana
   estado: EstadoCandidato
   fechaPostulacion: string
-  fechaFinCapa?: string | null
   riesgo: NivelRiesgo
   createdAt: string
   updatedAt: string

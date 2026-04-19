@@ -26,16 +26,6 @@ const Section = ({ title, children, right }: { title: string; children: React.Re
   </div>
 )
 
-const AutorTag = ({ nombre, fecha }: { nombre: string; fecha: string }) => {
-  if (!nombre) return null
-  return (
-    <div style={{ marginTop: 10, paddingTop: 8, borderTop: '1px solid var(--border)', display: 'flex', gap: 6, alignItems: 'center' }}>
-      <span style={{ fontSize: 10, color: 'var(--text3)' }}>✍ Cargado por</span>
-      <span style={{ fontSize: 10, fontWeight: 600, color: 'var(--text2)' }}>{nombre}</span>
-      <span style={{ fontSize: 10, color: 'var(--text3)', marginLeft: 'auto' }}>{fecha?.split('T')[0]}</span>
-    </div>
-  )
-}
 
 const NumberInput = ({ id, label, value }: { id: string; label: string; value?: number }) => (
   <div style={{ display: 'flex', flexDirection: 'column', gap: 5 }}>
@@ -148,7 +138,6 @@ export default function CandidatoModal({ candidato: initial, role, onClose, onSa
                   <h3 style={{ fontSize: 16, fontWeight: 600, marginBottom: 4 }}>{c.nombre}</h3>
                   <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap', marginBottom: 8 }}>
                     <span className="badge-gray">DNI: {c.dni}</span>
-                    {c.legajo && <span className="badge-gray">Leg. {c.legajo}</span>}
                     <span className="badge-blue">{CAMPANA_LABELS[c.campana]}</span>
                     <EstadoBadge estado={c.estado} />
                     {c.riesgo !== 'BAJO' && <RiesgoBadge riesgo={c.riesgo} />}
@@ -200,7 +189,6 @@ export default function CandidatoModal({ candidato: initial, role, onClose, onSa
                         </div>
                       ))}
                       {c.evalOps.comentarios && <div style={{ background:'var(--bg)',borderRadius:6,padding:'8px 10px',fontSize:12,color:'var(--text2)',fontStyle:'italic',marginTop:8 }}>"{c.evalOps.comentarios}"</div>}
-                      <AutorTag nombre={c.evalOps.autorNombre} fecha={c.evalOps.updatedAt} />
                     </Section>
                   ) : <Section title="Operaciones" right={<span className="badge-gray">Sin evaluar</span>}><div style={{ fontSize:12,color:'var(--text3)',fontStyle:'italic' }}>Pendiente.</div></Section>}
 
@@ -213,7 +201,6 @@ export default function CandidatoModal({ candidato: initial, role, onClose, onSa
                         </div>
                       ))}
                       {c.evalRRHH.comentarios && <div style={{ background:'var(--bg)',borderRadius:6,padding:'8px 10px',fontSize:12,color:'var(--text2)',fontStyle:'italic',marginTop:8 }}>"{c.evalRRHH.comentarios}"</div>}
-                      <AutorTag nombre={c.evalRRHH.autorNombre} fecha={c.evalRRHH.updatedAt} />
                     </Section>
                   ) : <Section title="Recursos Humanos" right={<span className="badge-gray">Sin evaluar</span>}><div style={{ fontSize:12,color:'var(--text3)',fontStyle:'italic' }}>Pendiente.</div></Section>}
 
@@ -226,7 +213,6 @@ export default function CandidatoModal({ candidato: initial, role, onClose, onSa
                         </div>
                       ))}
                       {c.evalCap.comentarios && <div style={{ background:'var(--bg)',borderRadius:6,padding:'8px 10px',fontSize:12,color:'var(--text2)',fontStyle:'italic',marginTop:8 }}>"{c.evalCap.comentarios}"</div>}
-                      <AutorTag nombre={c.evalCap.autorNombre} fecha={c.evalCap.updatedAt} />
                     </Section>
                   ) : <Section title="Capacitación" right={<span className="badge-gray">Sin evaluar</span>}><div style={{ fontSize:12,color:'var(--text3)',fontStyle:'italic' }}>Pendiente.</div></Section>}
                 </>
@@ -247,8 +233,7 @@ export default function CandidatoModal({ candidato: initial, role, onClose, onSa
                                 <span style={{ fontSize:11,fontWeight:600,color }}>{a.etapa} — {a.tipo}</span>
                                 <span style={{ fontSize:10,color:'var(--text3)' }}>{a.createdAt?.split('T')[0]}</span>
                               </div>
-                              <div style={{ fontSize:12,color:'var(--text2)',marginBottom:6 }}>{a.descripcion}</div>
-                              {a.autorNombre && <div style={{ fontSize:10,color:'var(--text3)' }}>✍ {a.autorNombre}</div>}
+                              <div style={{ fontSize:12,color:'var(--text2)' }}>{a.descripcion}</div>
                             </div>
                           </div>
                         )

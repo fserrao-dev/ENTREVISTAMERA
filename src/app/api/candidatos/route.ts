@@ -5,12 +5,11 @@ export const dynamic = 'force-dynamic'
 
 import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
-import { prisma, ensureSchema } from '@/lib/prisma'
+import { prisma } from '@/lib/prisma'
 import type { Campana, EstadoCandidato } from '@/types'
 
 export async function GET(request: NextRequest) {
   try {
-    await ensureSchema()
     const { searchParams } = new URL(request.url)
     const search  = searchParams.get('search') ?? ''
     const campana = searchParams.get('campana') as Campana | null
@@ -56,9 +55,8 @@ export async function GET(request: NextRequest) {
 }
 
 export async function POST(request: NextRequest) {
-  await ensureSchema()
   const body = await request.json()
-  const { nombre, dni, legajo, campana, fechaIngreso, fechaFinCapa } = body
+  const { nombre, dni, campana, fechaIngreso } = body
 
   if (!nombre?.trim() || !dni?.trim() || !campana) {
     return NextResponse.json({ error: 'Nombre, DNI y campaña son obligatorios.' }, { status: 400 })
@@ -69,10 +67,8 @@ export async function POST(request: NextRequest) {
       data: {
         nombre: nombre.trim(),
         dni: dni.trim(),
-        legajo: legajo?.trim() || null,
         campana,
         fechaPostulacion: fechaIngreso ? new Date(fechaIngreso) : new Date(),
-        fechaFinCapa: fechaFinCapa ? new Date(fechaFinCapa) : null,
       },
       include: {
         evalOps: true, evalRRHH: true, evalCap: true,

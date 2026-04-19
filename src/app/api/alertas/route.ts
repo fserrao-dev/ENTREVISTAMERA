@@ -5,12 +5,11 @@ export const dynamic = 'force-dynamic'
 
 import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
-import { prisma, ensureSchema } from '@/lib/prisma'
+import { prisma } from '@/lib/prisma'
 import { calcularRiesgo } from '@/lib/utils'
 
 export async function GET() {
   try {
-    await ensureSchema()
     const alertas = await prisma.alerta.findMany({
       where: { esDeEstado: false },
       orderBy: { createdAt: 'desc' },
@@ -27,7 +26,6 @@ export async function GET() {
 }
 
 export async function POST(request: NextRequest) {
-  await ensureSchema()
   const body = await request.json()
   const { candidatoId, etapa, tipo, descripcion } = body
 

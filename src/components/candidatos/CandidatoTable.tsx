@@ -57,7 +57,7 @@ export default function CandidatoTable({ candidatos, onRowClick, onEstadoChange 
               <td style={td}>
                 <div style={{ fontWeight: 500 }}>{c.nombre}</div>
                 <div style={{ fontSize: 10, color: 'var(--text3)' }}>
-                  {c.dni}{c.legajo ? ` · Leg. ${c.legajo}` : ''} · {c.fechaPostulacion.split('T')[0]}
+                  {c.dni} · {c.fechaPostulacion.split('T')[0]}
                 </div>
               </td>
 

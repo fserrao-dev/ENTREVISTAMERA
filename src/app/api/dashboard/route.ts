@@ -4,12 +4,11 @@
 export const dynamic = 'force-dynamic'
 
 import { NextResponse } from 'next/server'
-import { prisma, ensureSchema } from '@/lib/prisma'
+import { prisma } from '@/lib/prisma'
 import type { DashboardStats } from '@/types'
 
 export async function GET() {
   try {
-  await ensureSchema()
   const [candidatos, alertas] = await Promise.all([
     prisma.candidato.findMany({
       include: { evalOps: true, evalRRHH: true, evalCap: true, alertas: true },
