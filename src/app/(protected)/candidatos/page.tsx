@@ -43,10 +43,16 @@ export default function CandidatosPage() {
     if (filters.desde)   params.set('desde', filters.desde)
     if (filters.hasta)   params.set('hasta', filters.hasta)
 
-    const res = await fetch(`/api/candidatos?${params}`)
-    const data = await res.json()
-    setCandidatos(data.data ?? [])
-    setLoading(false)
+    try {
+      const res = await fetch(`/api/candidatos?${params}`)
+      const data = await res.json()
+      if (res.ok) setCandidatos(data.data ?? [])
+      else console.error('[fetchCandidatos] API error:', data.error)
+    } catch (e) {
+      console.error('[fetchCandidatos] fetch failed:', e)
+    } finally {
+      setLoading(false)
+    }
   }, [filters])
 
   useEffect(() => { fetchCandidatos() }, [fetchCandidatos])
