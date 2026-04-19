@@ -5,10 +5,11 @@ export const dynamic = 'force-dynamic'
 
 import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
-import { prisma } from '@/lib/prisma'
+import { prisma, ensureSchema } from '@/lib/prisma'
 import type { Campana, EstadoCandidato } from '@/types'
 
 export async function GET(request: NextRequest) {
+  await ensureSchema()
   const { searchParams } = new URL(request.url)
   const search  = searchParams.get('search') ?? ''
   const campana = searchParams.get('campana') as Campana | null
@@ -49,6 +50,7 @@ export async function GET(request: NextRequest) {
 }
 
 export async function POST(request: NextRequest) {
+  await ensureSchema()
   const body = await request.json()
   const { nombre, dni, legajo, campana, fechaIngreso, fechaFinCapa } = body
 

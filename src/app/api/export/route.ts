@@ -5,11 +5,12 @@ export const dynamic = 'force-dynamic'
 
 import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
-import { prisma } from '@/lib/prisma'
+import { prisma, ensureSchema } from '@/lib/prisma'
 import { generarCSV } from '@/lib/utils'
 import type { Campana, EstadoCandidato } from '@/types'
 
 export async function GET(request: NextRequest) {
+  await ensureSchema()
   const { searchParams } = new URL(request.url)
   const campana = searchParams.get('campana') as Campana | null
   const estado  = searchParams.get('estado') as EstadoCandidato | null

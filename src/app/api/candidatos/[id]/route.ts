@@ -5,10 +5,11 @@ export const dynamic = 'force-dynamic'
 
 import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
-import { prisma } from '@/lib/prisma'
+import { prisma, ensureSchema } from '@/lib/prisma'
 import { calcularRiesgo } from '@/lib/utils'
 
 export async function GET(_request: NextRequest, { params }: { params: { id: string } }) {
+  await ensureSchema()
   const candidato = await prisma.candidato.findUnique({
     where: { id: params.id },
     include: {
@@ -23,6 +24,7 @@ export async function GET(_request: NextRequest, { params }: { params: { id: str
 }
 
 export async function PATCH(request: NextRequest, { params }: { params: { id: string } }) {
+  await ensureSchema()
   const body = await request.json()
   const { action } = body
 
