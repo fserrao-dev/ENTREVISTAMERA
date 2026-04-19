@@ -9,16 +9,21 @@ import { prisma, ensureSchema } from '@/lib/prisma'
 import { calcularRiesgo } from '@/lib/utils'
 
 export async function GET() {
-  await ensureSchema()
-  const alertas = await prisma.alerta.findMany({
-    where: { esDeEstado: false },
-    orderBy: { createdAt: 'desc' },
-    include: {
-      candidato: { select: { id: true, nombre: true, dni: true, campana: true } },
-    },
-  })
-
-  return NextResponse.json({ data: alertas })
+  try {
+    await ensureSchema()
+    const alertas = await prisma.alerta.findMany({
+      where: { esDeEstado: false },
+      orderBy: { createdAt: 'desc' },
+      include: {
+        candidato: { select: { id: true, nombre: true, dni: true, campana: true } },
+      },
+    })
+    return NextResponse.json({ data: alertas })
+  } catch (err: unknown) {
+    const msg = (err as Error).message ?? String(err)
+    console.error('[GET /api/alertas]', msg)
+    return NextResponse.json({ error: msg }, { status: 500 })
+  }
 }
 
 export async function POST(request: NextRequest) {

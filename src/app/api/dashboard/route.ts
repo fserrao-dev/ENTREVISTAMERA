@@ -8,6 +8,7 @@ import { prisma, ensureSchema } from '@/lib/prisma'
 import type { DashboardStats } from '@/types'
 
 export async function GET() {
+  try {
   await ensureSchema()
   const [candidatos, alertas] = await Promise.all([
     prisma.candidato.findMany({
@@ -60,4 +61,9 @@ export async function GET() {
   }
 
   return NextResponse.json({ data: stats })
+  } catch (err: unknown) {
+    const msg = (err as Error).message ?? String(err)
+    console.error('[GET /api/dashboard]', msg)
+    return NextResponse.json({ error: msg }, { status: 500 })
+  }
 }
